@@ -9,18 +9,21 @@ const Form = ({properties, fields, buttons}) => {
     const inputFieldsNames = makeInitialValues(fields.inputs)
     const validateRules = makeValidateRules(fields.inputs);
 
-    const {handleChange, handleSubmit, handleBlur, values, errors} = useForm(inputFieldsNames, submit, validateRules);
+    const {handleChange, handleSubmit, handleBlur, values, touched, errors, isSubmitting} = useForm(inputFieldsNames, submit, validateRules);
 
     const inputs = fields.inputs?.length > 1
         && fields.inputs.map(item => <li key={item.id}>
             <Input {...item}
                    onChange={handleChange}
                    onBlur={handleBlur}
-                   value={values[item.name]}/>
+                   value={values[item.name]}
+                   error={(Object.keys(touched).includes(item.name) || isSubmitting)
+                   && (errors[item.name] && errors[item.name][Object.keys(errors[item.name]).find(key => errors[item.name][key])])}
+            />
         </li>);
 
     function submit() {
-        console.log('here we are')
+
     }
 
     return (

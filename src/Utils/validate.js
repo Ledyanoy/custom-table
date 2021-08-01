@@ -6,7 +6,7 @@ const validate = (values, validateRules) => {
             switch (validate) {
                 case "maxLength":
                     values[value].length > validateRules[value][validate]
-                        ? errors[value] = {...errors[value], maxLength: 'Много'}
+                        ? errors[value] = {...errors[value], maxLength: `Не более ${validateRules[value][validate]} символов`}
                         : errors[value] = {...errors[value], maxLength: false};
                     break;
                 case "isEmpty":
@@ -14,10 +14,15 @@ const validate = (values, validateRules) => {
                         ? errors[value] = {...errors[value], isEmpty: false}
                         : errors[value] = {...errors[value], isEmpty: 'обязательное поле'};
                     break;
+                case 'regular':
+                    !validateRules[value][validate].test(values[value])
+                        ? errors[value] = {...errors[value], regular: `Не правильно заполнено поле`}
+                        : errors[value] = {...errors[value], regular: false};
+                    break;
             }
         }
     }
-    console.log(errors)
+
     return errors;
 }
 
