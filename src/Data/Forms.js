@@ -24,9 +24,9 @@ export const simpleForm = {
             {
                 id: 'phone',
                 name: 'phone',
-                type: 'phone',
+                type: 'tel',
                 title: 'Телефон',
-                placeholder: '+7(999) 999 99 99',
+                placeholder: '8 (999) 999 99 99',
                 validation: {
                     [submitValidationRules.isEmpty]: true,
                     [submitValidationRules.regular]: /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,

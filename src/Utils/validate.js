@@ -25,7 +25,7 @@ const validate = (values, validateRules) => {
                         : errors[value] = {...errors[value], regular: false};
                     break;
                 case submitValidationRules.minWords:
-                    values[value].split(' ').length < validateRules[value][validate]
+                    values[value].trim().split(' ').length < validateRules[value][validate]
                         ? errors[value] = {
                             ...errors[value],
                             minWords: `Не менее ${validateRules[value][validate]} слов`
