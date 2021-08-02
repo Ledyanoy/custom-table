@@ -1,6 +1,6 @@
-const makeValidationRules = (fieldsArr) => {
+const makeValidationRules = (fieldsArr, rule) => {
     let obj = {};
-    fieldsArr.forEach(item => obj[item.name] = item.validation);
+    fieldsArr.forEach(item => item[rule] && (obj[item.name] = item[rule]));
     return obj;
 }
 

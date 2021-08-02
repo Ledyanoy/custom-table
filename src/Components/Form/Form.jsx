@@ -7,9 +7,10 @@ import makeValidateRules from "../../Utils/makeValidateRules";
 const Form = ({properties, fields, buttons}) => {
 
     const inputFieldsNames = makeInitialValues(fields.inputs)
-    const validateRules = makeValidateRules(fields.inputs);
+    const validateRules = makeValidateRules(fields.inputs, 'validation');
+    const maskValidateRules = makeValidateRules(fields.inputs, 'maskValidation');
 
-    const {handleChange, handleSubmit, handleBlur, values, touched, errors, isSubmitting} = useForm(inputFieldsNames, submit, validateRules);
+    const {handleChange, handleSubmit, handleBlur, values, touched, errors, isSubmitting} = useForm(inputFieldsNames, submit, validateRules, maskValidateRules);
 
     const inputs = fields.inputs?.length > 1
         && fields.inputs.map(item => <li key={item.id}>
@@ -30,7 +31,13 @@ const Form = ({properties, fields, buttons}) => {
         <form action={properties.action} noValidate={properties.declineBrowserValidation} onSubmit={handleSubmit}>
             {inputs.length > 1
                 ? <ul>{inputs}</ul>
-                : <Input {...fields.inputs[0]}/>
+                : <Input {...fields.inputs[0]}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
+                         value={values[fields.inputs[0].name]}
+                         error={(Object.keys(touched).includes(fields.inputs[0].name) || isSubmitting)
+                         && (errors[fields.inputs[0].name] && errors[fields.inputs[0].name][Object.keys(errors[fields.inputs[0].name]).find(key => errors[fields.inputs[0].name][key])])}
+                />
             }
             <button type='submit'>sub</button>
         </form>

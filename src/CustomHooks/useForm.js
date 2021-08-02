@@ -1,7 +1,8 @@
 import {useState, useEffect} from "react";
 import validate from "../Utils/validate";
+import maskValidate from "../Utils/maskValidate";
 
-const useForm = (initialValues, callback, validateRules) => {
+const useForm = (initialValues, callback, validateRules, maskValidateRules) => {
     const [values, setValues] = useState(initialValues);
     const [touched, setTouched] = useState({});
     const [errors, setErrors] = useState({});
@@ -11,7 +12,7 @@ const useForm = (initialValues, callback, validateRules) => {
         const {name, value} = event.target;
         setValues({
             ...values,
-            [name]: value
+            [name]: maskValidate(value, name, maskValidateRules)
         });
     };
 
