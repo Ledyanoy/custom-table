@@ -1,0 +1,42 @@
+.container {
+  display: block;
+}
+
+.title {
+  font-size: 14px;
+  line-height: 17px;
+  color: grey;
+  display: block;
+  margin-bottom: 4px;
+
+  .invalid & {
+    color: firebrick;
+  }
+}
+
+.inputField {
+  font-size: 16px;
+  line-height: 22px;
+  padding: 6px;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid grey;
+  border-radius: 4px;
+
+  .invalid & {
+    border-color: red;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  line-height: 17px;
+  margin-top: 4px;
+}
+
+

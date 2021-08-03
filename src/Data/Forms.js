@@ -2,12 +2,13 @@ import {onChangeValidationRules, submitValidationRules} from "../Constants/valid
 
 export const simpleForm = {
     properties: {
-        title: 'Simple Form',
+        legend: 'Simple Form',
         action: 'submit',
+        className: '',
         declineBrowserValidation: true
     },
-    fields: {
-        inputs: [
+    fields:
+        [
             {
                 id: 'initials',
                 name: 'initials',
@@ -26,10 +27,10 @@ export const simpleForm = {
                 name: 'phone',
                 type: 'tel',
                 title: 'Телефон',
-                placeholder: '8 (999) 999 99 99',
+                placeholder: '+7 (999) 999-99-99',
                 validation: {
                     [submitValidationRules.isEmpty]: true,
-                    [submitValidationRules.regular]: /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+                    [submitValidationRules.regular]: /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/,
                 },
                 maskValidation: onChangeValidationRules.phoneNumber
             },
@@ -41,7 +42,8 @@ export const simpleForm = {
                 placeholder: 'example@mail.com',
                 validation: {
                     [submitValidationRules.isEmpty]: true,
-                    [submitValidationRules.regular]: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    [submitValidationRules.maxLength]: 30,
+                    [submitValidationRules.regular]: /^([0-9A-Za-z<>()[\]\/\\,.;\:\s@$`#^&?!№%*_+="{}'|]{1,})([0-9A-Za-z<>()[\]\/\\,;\:\s$`#^&?!№%*_+="{}'|]{1})@([0-9A-Za-z<>()[\]\/\\,;\:\s$`#^&?!№%*_+="{}'|]{2}\.){1}[[0-9A-Za-z<>()[\]\/\\,.;\:\s@$`#^&?!№%*_+="{}'|]{1,}$/,
                 },
                 maskValidation: onChangeValidationRules.email
             },
@@ -59,9 +61,8 @@ export const simpleForm = {
                 maskValidation: onChangeValidationRules.date
             },
         ],
-        checkboxes: [],
-        radios: [],
-        textarea: []
-    },
-    buttons: []
+    buttons: [{
+        children: 'Submit',
+        type: 'submit',
+    }]
 }

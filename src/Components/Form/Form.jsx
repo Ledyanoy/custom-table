@@ -1,19 +1,34 @@
 import React from 'react';
+import clsx from "clsx";
+
 import Input from "../Input";
+import Button from "../Button";
+
 import useForm from "../../CustomHooks/useForm";
+
 import makeInitialValues from "../../Utils/makeInitialValues";
-import makeValidateRules from "../../Utils/makeValidateRules";
+import makeValidateRulesObj from "../../Utils/makeValidateRules";
 
-const Form = ({properties, fields, buttons}) => {
+import styles from './Form.module.scss';
 
-    const inputFieldsNames = makeInitialValues(fields.inputs)
-    const validateRules = makeValidateRules(fields.inputs, 'validation');
-    const maskValidateRules = makeValidateRules(fields.inputs, 'maskValidation');
+const Form = ({properties, fields, buttons, className}) => {
 
-    const {handleChange, handleSubmit, handleBlur, values, touched, errors, isSubmitting} = useForm(inputFieldsNames, submit, validateRules, maskValidateRules);
+    const inputFieldsNames = makeInitialValues(fields)
+    const validateRules = makeValidateRulesObj(fields, 'validation');
+    const maskValidateRules = makeValidateRulesObj(fields, 'maskValidation');
 
-    const inputs = fields.inputs?.length > 1
-        && fields.inputs.map(item => <li key={item.id}>
+    const {
+        handleChange,
+        handleSubmit,
+        handleBlur,
+        values,
+        touched,
+        errors,
+        isSubmitting
+    } = useForm(inputFieldsNames, submit, validateRules, maskValidateRules);
+
+    const inputs = fields.length > 1
+        && fields.map(item => <li key={item.id} className={styles.fieldsListItem}>
             <Input {...item}
                    onChange={handleChange}
                    onBlur={handleBlur}
@@ -23,23 +38,36 @@ const Form = ({properties, fields, buttons}) => {
             />
         </li>);
 
-    function submit() {
+    const buttonsList = buttons.length > 1
+        && buttons.map(item => <li key={item.id} className={styles.button}>
+            <Button {...item} onClick={submit}/>
+        </li>);
 
+    function submit() {
     }
 
     return (
-        <form action={properties.action} noValidate={properties.declineBrowserValidation} onSubmit={handleSubmit}>
+        <form action={properties.action}
+              noValidate={properties.declineBrowserValidation}
+              onSubmit={handleSubmit}
+              className={clsx(styles.form, properties.className, className)}
+        >
+            {properties.legend && <legend className={styles.legend}>{properties.legend}</legend>}
             {inputs.length > 1
-                ? <ul>{inputs}</ul>
+                ? <ul className={styles.fieldsList}>{inputs}</ul>
                 : <Input {...fields.inputs[0]}
                          onChange={handleChange}
                          onBlur={handleBlur}
-                         value={values[fields.inputs[0].name]}
-                         error={(Object.keys(touched).includes(fields.inputs[0].name) || isSubmitting)
-                         && (errors[fields.inputs[0].name] && errors[fields.inputs[0].name][Object.keys(errors[fields.inputs[0].name]).find(key => errors[fields.inputs[0].name][key])])}
+                         classname={styles.fieldsListItem}
+                         value={values[fields[0].name]}
+                         error={(Object.keys(touched).includes(fields[0].name) || isSubmitting)
+                         && (errors[fields[0].name] && errors[fields[0].name][Object.keys(errors[fields[0].name]).find(key => errors[fields[0].name][key])])}
                 />
             }
-            <button type='submit'>sub</button>
+            {buttons.length > 1
+                ? <ul className={styles.buttonsList}>{buttonsList}</ul>
+                : <Button {...buttons[0]} onClick={submit} className={styles.button}/>
+            }
         </form>
     );
 };
