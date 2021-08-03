@@ -27,14 +27,19 @@ const maskValidate = (value, name, maskValidateRules) => {
                 validatedValue = value.trim();
                 break;
             }
-            validatedValue = value.replace(/\D/g, '').replace(/^[1,2,7]/, '')
+            validatedValue = value.replace(/\D/g, '').replace(/^[1,2,7]/, '');
+
             let c = validatedValue.match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            console.log(c);
-            validatedValue = !c[2] ? c[1]
-                : !c[3] ? c[1] + ' ' + c[2]
-                    : !c[4] ? c[1] + ' ' + '(' + c[2] + ') ' + c[3]
-                        : c[1] + ' ' + '(' + c[2] + ') ' + c[3] + '-' + c[4] + (c[5] ? '-' + c[5] : '');
-            // validatedValue = validatedValue.replace(/^8|/, '+7')
+            let b = validatedValue.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            validatedValue = (c[1] === '8')
+                ? (!c[2] ? '+7'
+                : !c[3] ? `+7 ${c[2]}`
+                    : !c[4] ? `+7 (${c[2]}) ${c[3]}`
+                        : `+7 (${c[2]}) ${c[3]}-${c[4]}${(c[5] ? -c[5] : '')}`)
+                : (!b[2] ? `+7 (${b[1]}`
+                    : !b[3] ? `+7 (${b[1]}) ${b[2]}`
+                        : !b[4] ? `+7 (${b[1]}) ${b[2]}-${b[3]}`
+                            : `+7 (${b[1]}) ${b[2]}-${b[3]}${(b[4] ? -b[4] : '')}`)
 
             break;
         case onChangeValidationRules.email:
@@ -42,17 +47,16 @@ const maskValidate = (value, name, maskValidateRules) => {
             validatedValue = value.replace(/ /g, '');
             break;
         case onChangeValidationRules.date:
-            let x = value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,2})(\d{0,4})/);
-            validatedValue = !x[2] ? x[1] : x[1] + '.' + x[2] + (x[3] ? ('.' + x[3]) : '');
+            let x = value.replace(/\D/g, '').replace(/^[4-9]/, '').match(/(\d{0,2})(\d{0,2})(\d{0,4})/);
+            let day = (+x[1] > 31) ? '31' : x[1];
+            let month = (+x[2] > 12) ? '12' : x[2];
+            validatedValue = !month ? day : `${day}.${month}${(x[3] ? '.' + x[3] : '')}`;
             break;
         default:
             break;
-
     }
 
     return validatedValue;
-
-
 }
 
 export default maskValidate;

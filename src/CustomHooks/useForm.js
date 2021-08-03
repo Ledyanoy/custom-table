@@ -32,9 +32,7 @@ const useForm = (initialValues, callback, validateRules, maskValidateRules) => {
     };
 
     useEffect(() => {
-        // if (Object.keys(errors).length === 0 && isSubmitting) {
-            // callback();
-        // }
+         callback();
     }, [errors]);
 
     return {
